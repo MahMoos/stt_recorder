@@ -1,0 +1,16 @@
+name: publish_stt_recorder
+
+on:
+  push:
+    tags:
+      - "stt_recorder-v*"
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    uses: ./.github/workflows/publish_pub_dev.yaml
+    with:
+      package: stt_recorder

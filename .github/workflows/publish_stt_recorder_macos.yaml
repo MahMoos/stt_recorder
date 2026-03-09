@@ -1,0 +1,16 @@
+name: publish_stt_recorder_macos
+
+on:
+  push:
+    tags:
+      - "stt_recorder_macos-v*"
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    uses: ./.github/workflows/publish_pub_dev.yaml
+    with:
+      package: stt_recorder_macos

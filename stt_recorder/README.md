@@ -133,6 +133,9 @@ Before publishing:
    sibling packages.
 3. Verify iOS podspec metadata/license are correct.
 4. Validate example app on Android, iOS, macOS, and web.
+5. For automated publishing, configure pub.dev trusted publishing to use
+   workflow `publish_stt_recorder.yaml`, environment `pub.dev`, and tag pattern
+   `stt_recorder-v{{version}}`.
 
 ## License
 

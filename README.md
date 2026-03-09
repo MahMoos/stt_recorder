@@ -81,3 +81,30 @@ dart analyze
    - `stt_recorder_macos`
    - `stt_recorder_web`
    - `stt_recorder`
+
+## Automated pub.dev publishing
+
+GitHub Actions is configured for pub.dev trusted publishing with one workflow per
+package:
+
+- `publish_stt_recorder_platform_interface.yaml` with tag
+  `stt_recorder_platform_interface-v{{version}}`
+- `publish_stt_recorder_android.yaml` with tag
+  `stt_recorder_android-v{{version}}`
+- `publish_stt_recorder_ios.yaml` with tag
+  `stt_recorder_ios-v{{version}}`
+- `publish_stt_recorder_macos.yaml` with tag
+  `stt_recorder_macos-v{{version}}`
+- `publish_stt_recorder_web.yaml` with tag
+  `stt_recorder_web-v{{version}}`
+- `publish_stt_recorder.yaml` with tag `stt_recorder-v{{version}}`
+
+Complete the pub.dev side once per package in the package Admin page:
+
+1. Add trusted publishing for repository `MahMoos/stt_recorder`.
+2. Select the matching workflow file for the package.
+3. Set the GitHub environment to `pub.dev`.
+4. Set the tag pattern to the package-specific `...-v{{version}}` value above.
+
+After that, release by pushing the matching tag for each package version in the
+documented publish order.

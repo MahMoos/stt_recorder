@@ -11,6 +11,8 @@ on:
     paths:
       - "stt_recorder/pubspec.yaml"
       - "stt_recorder_platform_interface/pubspec.yaml"
+      - "stt_recorder_android/pubspec.yaml"
+      - "stt_recorder_ios/pubspec.yaml"
       - "stt_recorder_macos/pubspec.yaml"
       - "stt_recorder_web/pubspec.yaml"
       - ".github/workflows/license_check.yaml"
@@ -20,31 +22,46 @@ on:
     paths:
       - "stt_recorder/pubspec.yaml"
       - "stt_recorder_platform_interface/pubspec.yaml"
+      - "stt_recorder_android/pubspec.yaml"
+      - "stt_recorder_ios/pubspec.yaml"
       - "stt_recorder_macos/pubspec.yaml"
       - "stt_recorder_web/pubspec.yaml"
       - ".github/workflows/license_check.yaml"
 
 jobs:
   license_check:
-    uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/license_check.yml@v1
-    with:
-      allowed: "MIT,BSD-3-Clause,BSD-2-Clause,Apache-2.0"
-      working_directory: stt_recorder
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        working_directory:
+          - stt_recorder
+          - stt_recorder_platform_interface
+          - stt_recorder_android
+          - stt_recorder_ios
+          - stt_recorder_macos
+          - stt_recorder_web
+    defaults:
+      run:
+        working-directory: ${{ matrix.working_directory }}
 
-  license_check_platform_interface:
-    uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/license_check.yml@v1
-    with:
-      allowed: "MIT,BSD-3-Clause,BSD-2-Clause,Apache-2.0"
-      working_directory: stt_recorder_platform_interface
+    steps:
+      - name: 📚 Git Checkout
+        uses: actions/checkout@v6
 
-  license_check_macos:
-    uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/license_check.yml@v1
-    with:
-      allowed: "MIT,BSD-3-Clause,BSD-2-Clause,Apache-2.0"
-      working_directory: stt_recorder_macos
+      - name: 🐦 Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.41.1
+          cache: true
+          cache-key: flutter-:os:-stable-3.41.1-:arch:-:hash:-${{ hashFiles('**/pubspec.lock') }}
 
-  license_check_web:
-    uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/license_check.yml@v1
-    with:
-      allowed: "MIT,BSD-3-Clause,BSD-2-Clause,Apache-2.0"
-      working_directory: stt_recorder_web
+      - name: 📦 Install Dependencies
+        run: flutter pub get
+
+      - name: 👨‍⚖️ Check licenses
+        run: |
+          dart pub global activate very_good_cli
+          dart pub global run very_good_cli:very_good packages check licenses \
+            --allowed=MIT,BSD-3-Clause,BSD-2-Clause,Apache-2.0,Zlib \
+            --dependency-type=direct-main,transitive

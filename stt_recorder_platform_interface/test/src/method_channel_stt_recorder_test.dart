@@ -37,6 +37,8 @@ void main() {
     tearDown(() {
       TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
           .setMockMethodCallHandler(platform.methodChannel, null);
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockStreamHandler(platform.eventChannel, null);
     });
 
     test('startCapture sends expected method call', () async {
@@ -81,5 +83,37 @@ void main() {
 
       expect(platform.stopCapture, throwsException);
     });
+
+    test('partialTextStream filters non-string events', () async {
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockStreamHandler(
+            platform.eventChannel,
+            MockStreamHandler.inline(
+              onListen: (_, events) {
+                events
+                  ..success('partial')
+                  ..success(42)
+                  ..success('final')
+                  ..endOfStream();
+              },
+            ),
+          );
+
+      await expectLater(
+        platform.partialTextStream().toList(),
+        completion(<String>['partial', 'final']),
+      );
+    });
+  });
+
+  test('VoiceCaptureArtifact.fromMap throws for invalid payloads', () {
+    expect(
+      () => VoiceCaptureArtifact.fromMap(<Object?, Object?>{
+        'bytes': 'not-bytes',
+        'fileName': 'voice.wav',
+        'mimeType': 'audio/wav',
+      }),
+      throwsException,
+    );
   });
 }

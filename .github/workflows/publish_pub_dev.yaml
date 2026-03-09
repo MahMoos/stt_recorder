@@ -1,0 +1,61 @@
+name: publish_pub_dev
+
+on:
+  workflow_call:
+    inputs:
+      package:
+        required: true
+        type: string
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment: pub.dev
+    permissions:
+      contents: read
+      id-token: write
+    timeout-minutes: 45
+
+    steps:
+      - name: 📚 Git Checkout
+        uses: actions/checkout@v6
+
+      - name: 🐦 Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.41.1
+          cache: true
+          cache-key: flutter-:os:-stable-3.41.1-:arch:-:hash:-${{ hashFiles('**/pubspec.lock') }}
+
+      - name: ✅ Verify tag matches package version
+        env:
+          PACKAGE: ${{ inputs.package }}
+          TAG_NAME: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+
+          version="$(awk '/^version: / { print $2; exit }' "${PACKAGE}/pubspec.yaml")"
+          expected_tag="${PACKAGE}-v${version}"
+
+          if [[ "$TAG_NAME" != "$expected_tag" ]]; then
+            echo "::error::Expected tag ${expected_tag}, got ${TAG_NAME}."
+            exit 1
+          fi
+
+      - name: 🧹 Remove local overrides for hosted-resolution validation
+        env:
+          PACKAGE: ${{ inputs.package }}
+        run: |
+          rm -f "${PACKAGE}/pubspec_overrides.yaml"
+          rm -f "${PACKAGE}/example/pubspec_overrides.yaml"
+
+      - name: 🚀 Validate and publish package
+        working-directory: ${{ inputs.package }}
+        run: |
+          set -euo pipefail
+          flutter pub get
+          dart format --output=none --set-exit-if-changed lib test
+          flutter analyze
+          flutter test
+          flutter pub publish --dry-run
+          flutter pub publish --force

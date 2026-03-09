@@ -5,6 +5,28 @@ import 'package:stt_recorder_web/src/wav_encoder.dart';
 
 void main() {
   group('encodePcm16Wav', () {
+    test('throws when channels are empty', () {
+      expect(
+        () => encodePcm16Wav(
+          channels: const <Float32List>[],
+          sampleRate: 16000,
+        ),
+        throwsArgumentError,
+      );
+    });
+
+    test('throws when sample rate is not positive', () {
+      expect(
+        () => encodePcm16Wav(
+          channels: <Float32List>[
+            Float32List.fromList(const <double>[0]),
+          ],
+          sampleRate: 0,
+        ),
+        throwsArgumentError,
+      );
+    });
+
     test('encodes mono PCM samples into a WAV container', () {
       final wavBytes = encodePcm16Wav(
         channels: <Float32List>[

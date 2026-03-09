@@ -34,6 +34,8 @@ void main() {
     tearDown(() {
       TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
           .setMockMethodCallHandler(platform.methodChannel, null);
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockStreamHandler(platform.eventChannel, null);
     });
 
     test('registerWith sets the platform instance', () {
@@ -67,10 +69,45 @@ void main() {
       expect(log, <Matcher>[isMethodCall('stopCapture', arguments: null)]);
     });
 
+    test('stopCapture throws when native response is invalid', () async {
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(platform.methodChannel, (methodCall) async {
+            log.add(methodCall);
+            if (methodCall.method == 'stopCapture') {
+              return 'invalid';
+            }
+            return null;
+          });
+
+      await expectLater(platform.stopCapture(), throwsException);
+      expect(log, <Matcher>[isMethodCall('stopCapture', arguments: null)]);
+    });
+
     test('cancelCapture sends expected method call', () async {
       await platform.cancelCapture();
 
       expect(log, <Matcher>[isMethodCall('cancelCapture', arguments: null)]);
+    });
+
+    test('partialTextStream filters non-string events', () async {
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockStreamHandler(
+            platform.eventChannel,
+            MockStreamHandler.inline(
+              onListen: (_, events) {
+                events
+                  ..success('partial')
+                  ..success(42)
+                  ..success('final')
+                  ..endOfStream();
+              },
+            ),
+          );
+
+      await expectLater(
+        platform.partialTextStream().toList(),
+        completion(<String>['partial', 'final']),
+      );
     });
   });
 }

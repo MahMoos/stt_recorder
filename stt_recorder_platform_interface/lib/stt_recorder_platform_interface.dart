@@ -11,8 +11,7 @@ abstract class SttRecorderPlatform extends PlatformInterface {
 
   static final Object _token = Object();
 
-  static SttRecorderPlatform _instance =
-      MethodChannelSttRecorder();
+  static SttRecorderPlatform _instance = MethodChannelSttRecorder();
 
   /// The active platform implementation instance.
   static SttRecorderPlatform get instance => _instance;

@@ -7,4 +7,22 @@ on:
 
 jobs:
   build:
-    uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/semantic_pull_request.yml@v1
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🤖 Skip semantic PR check for Dependabot
+        if: github.actor == 'dependabot[bot]'
+        run: echo "Dependabot PR title validation is skipped."
+
+      - name: 🤖 Ensure Commit is Semantic
+        if: github.actor != 'dependabot[bot]'
+        uses: amannn/action-semantic-pull-request@48f256284bd46cdaab1048c3721360e808335d50 # v6.1.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          validateSingleCommit: false
+          ignoreLabels: |
+            bot
+            dependencies
+            ignore-semantic-pull-request
+          wip: false
