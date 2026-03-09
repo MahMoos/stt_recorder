@@ -1,0 +1,11 @@
+dependency_overrides:
+  stt_recorder_android:
+    path: ../stt_recorder_android
+  stt_recorder_ios:
+    path: ../stt_recorder_ios
+  stt_recorder_macos:
+    path: ../stt_recorder_macos
+  stt_recorder_platform_interface:
+    path: ../stt_recorder_platform_interface
+  stt_recorder_web:
+    path: ../stt_recorder_web

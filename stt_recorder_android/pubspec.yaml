@@ -1,0 +1,31 @@
+name: stt_recorder_android
+description: Android implementation of the stt_recorder plugin
+version: 0.1.0+1
+homepage: https://github.com/MahMoos/stt_recorder
+repository: https://github.com/MahMoos/stt_recorder
+issue_tracker: https://github.com/MahMoos/stt_recorder/issues
+
+environment:
+  sdk: ^3.9.2
+  flutter: '>=3.0.0'
+
+flutter:
+  plugin:
+    implements: stt_recorder
+    platforms:
+      android:
+        package: com.stt_recorder
+        pluginClass: SttRecorderPlugin
+        dartPluginClass: SttRecorderAndroid
+
+dependencies:
+  flutter:
+    sdk: flutter
+  stt_recorder_platform_interface:
+    ^0.1.0+1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  plugin_platform_interface: ^2.1.8
+  very_good_analysis: ^10.2.0

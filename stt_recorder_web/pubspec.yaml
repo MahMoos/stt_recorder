@@ -1,0 +1,32 @@
+name: stt_recorder_web
+description: Web implementation of the stt_recorder plugin
+version: 0.1.0+1
+homepage: https://github.com/MahMoos/stt_recorder
+repository: https://github.com/MahMoos/stt_recorder
+issue_tracker: https://github.com/MahMoos/stt_recorder/issues
+
+environment:
+  sdk: ^3.9.2
+  flutter: '>=3.0.0'
+
+flutter:
+  plugin:
+    implements: stt_recorder
+    platforms:
+      web:
+        pluginClass: SttRecorderWeb
+        fileName: stt_recorder_web.dart
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_web_plugins:
+    sdk: flutter
+  stt_recorder_platform_interface:
+    ^0.1.0+1
+  web: ^1.1.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  very_good_analysis: ^10.2.0

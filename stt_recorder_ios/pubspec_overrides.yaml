@@ -1,0 +1,3 @@
+dependency_overrides:
+  stt_recorder_platform_interface:
+    path: ../stt_recorder_platform_interface

@@ -1,0 +1,20 @@
+name: stt_recorder_platform_interface
+description: A common platform interface for the stt_recorder plugin.
+version: 0.1.0+1
+homepage: https://github.com/MahMoos/stt_recorder
+repository: https://github.com/MahMoos/stt_recorder
+issue_tracker: https://github.com/MahMoos/stt_recorder/issues
+
+environment:
+  sdk: ^3.9.2
+  flutter: '>=3.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  plugin_platform_interface: ^2.1.8
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  very_good_analysis: ^10.2.0

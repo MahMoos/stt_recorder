@@ -1,0 +1,43 @@
+name: stt_recorder
+description: Single pipeline voice capture + STT bridge
+version: 0.1.0+1
+homepage: https://github.com/MahMoos/stt_recorder
+repository: https://github.com/MahMoos/stt_recorder
+issue_tracker: https://github.com/MahMoos/stt_recorder/issues
+
+environment:
+  sdk: ^3.9.2
+  flutter: '>=3.0.0'
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        default_package: stt_recorder_android
+      ios:
+        default_package: stt_recorder_ios
+      macos:
+        default_package: stt_recorder_macos
+      web:
+        default_package: stt_recorder_web
+
+dependencies:
+  flutter:
+    sdk: flutter
+  stt_recorder_android:
+    ^0.1.0+1
+  stt_recorder_ios:
+    ^0.1.0+1
+  stt_recorder_macos:
+    ^0.1.0+1
+  stt_recorder_platform_interface:
+    ^0.1.0+1
+  stt_recorder_web:
+    ^0.1.0+1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  mocktail: ^1.0.4
+  plugin_platform_interface: ^2.1.8
+  very_good_analysis: ^10.2.0

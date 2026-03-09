@@ -1,0 +1,27 @@
+version: 2
+enable-beta-ecosystems: true
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "pub"
+    directory: "/stt_recorder"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "pub"
+    directory: "/stt_recorder/example"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "pub"
+    directory: "/stt_recorder_platform_interface"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "pub"
+    directory: "/stt_recorder_android"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "pub"
+    directory: "/stt_recorder_ios"
+    schedule:
+      interval: "daily"
